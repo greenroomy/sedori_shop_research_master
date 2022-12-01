@@ -1,0 +1,23 @@
+amazon_config:
+  SPAPI_LWA_Client_ID: 'amzn1.application-oa2-client.6c99fe60794c408cbca56a9d4e2df03d'
+  SPAPI_LWA_Client_PW: 'ded6321f1d53dd28e8e5bf47ebd5ea8ba5d6cae3a4a26102270acbc3f6275d2e'
+  SPAPI_Refresh_Token: 'Atzr|IwEBIGXGNNgBS5aPqc2L8Do1T9CLBL037kCl6itQeFyrA_9BKqJ3posruj2Do01G5otrpiYvoM6MxcmeS82C0ZCNL1MctZ-Rbsp-TtX_vUR_ry3sEyxBOXmeURTfHikG1LyZUouUFsFXBbTwLlodZMXxz4s3SVEG77xdqxq8UbMHdlJme0XV9aoTKIatNSXtBfCVUW-IDRLbOMlKE7pEsJWDmjYcosjppukgf_4KEdIXoYPkpgsfLXFe4UJvZB7-KG08Hvv9uaN1LJHwH9dxv2qUxPOd9ppkyRZIa5kRSvFbMgr7I6bGMpTn-y0K59ADdVm4fKw'
+  SPAPI_Access_Token_Endpoint: 'https://api.amazon.com/auth/o2/token'
+  SPAPI_IAM_User_Access_Key: 'AKIAYACLP32QC3Y4V22U'
+  SPAPI_IAM_User_Secret_Key: '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'
+  SPAPI_Service: 'execute-api'
+  SPAPI_Domain: 'sellingpartnerapi-fe.amazon.com'
+  SPAPI_MarketplaceId: 'A1VC38T7YXB528'
+  SPAPI_Region: 'us-west-2'
+  SPAPI_Endpoint: 'https://sellingpartnerapi-fe.amazon.com'
+  SPAPI_SignatureMethod: 'AWS4-HMAC-SHA256'
+  SPAPI_UserAgent: 'Greenrooms-SPAPI-App/Ver1.0'
+  SPAPI_Method: 'GET'
+
+keepa_config:
+  ACCESS_KEY: '5jubhvfiqvtrnu1b11bt8790o3f1np86ih96ple0eefmvgq9bqjh4reaohnu9juk'
+
+ss_config:
+  SHEET_ID: '1KtdDR8ufyPXn_J9bRs0B-uUS0jzU4qyHWgNHQ_G4W30'
+  FOLDER_ID: '1oExzy8pG9sFiiIfsiUdivS8EouB1dizt'
+
