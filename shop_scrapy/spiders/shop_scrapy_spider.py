@@ -41,7 +41,28 @@ class ShopScrapySpiderSpider(scrapy.Spider):
             # 次のページがあれば繰り返し
             if next_page and self.page_counter <= int(self.maxpage):
                 yield response.follow(url=next_page, callback=self.parse)
-        # 楽天の場合
+
+        # 楽天ブックスの場合
+        elif 'books.rakuten.co.jp' in domain:
+            self.page_counter += 1
+            elems = response.xpath('//div[@class="rbcomp__item-list__item__details__lead"]/h3')
+            for elem in elems:
+                yield response.follow(url=elem.xpath('.//a/@href').get(),
+                                      callback=self.rakuten_books_parse_item)
+            # 次のページのリンクを取得
+            # '次の'XX件があるか確認('前の'がなければnext_urls[1]が次のページ)
+            next_tag = response.xpath('//div[@class="rbcomp__pager-controller"]/a/text()').getall()
+            next_urls = response.xpath('//div[@class="rbcomp__pager-controller"]/a/@href').getall()
+            if '« 前の' in next_tag:
+                next_page = next_urls[1]
+            else:
+                next_page = next_urls[0]
+
+            # 次のページがあれば繰り返し
+            if next_page and self.page_counter <= int(self.maxpage):
+                yield response.follow(url=next_page, callback=self.parse)
+
+        # 楽天(一般)の場合
         elif 'rakuten.co.jp' in domain:
             self.page_counter += 1
             elems = response.xpath('//div[@class="content title"]/h2')
@@ -89,34 +110,24 @@ class ShopScrapySpiderSpider(scrapy.Spider):
             url=response.request.url
         )
 
-    #
-    # def parse(self, response):
-    #     # maxpageを超えないようにするためのページのカウンター設定
-    #     self.page_counter += 1
-    #     # 商品の要素を取得
-    #     # inspect_response(response, self)
-    #     elems = response.xpath('//div[@class="elName"]')
-    #     for elem in elems:
-    #         yield response.follow(url=elem.xpath('.//a/@href').get(),
-    #                               callback=self.parse_item)
-    #     # 次のページのリンクを取得
-    #     next_page = response.xpath('//li[@class="elNext"]/a/@href').get()
-    #
-    #     # 次のページがあれば繰り返し
-    #     if next_page and self.page_counter <= int(self.maxpage):
-    #         yield response.follow(url=next_page, callback=self.parse)
-    #
-    # # 商品ページのパーサー
-    # def parse_item(self, response):
-    #     # priceのカンマを削除してint型に変換
-    #     before_price = response.xpath('.//span[@class="elPriceNumber"]/text()').get()
-    #     int_price = int(before_price.replace(',', ''))
-    #     # Items.pyのPostItemへyieldする
-    #     yield PostItem(
-    #         title=response.xpath('.//p[@class="elName"]/text()').get(),
-    #         price=int_price,
-    #         jan=response.xpath('.//div[@class="elRowTitle"]/p[contains(text(),"JAN")]/'
-    #                            'ancestor::li/div[@class="elRowData"]/p/text()').get(),
-    #         url=response.request.url
-    #     )
-    #
+    # 楽天商品ブックスページのパーサー
+    def rakuten_books_parse_item(self, response):
+        # priceをint型に変換
+        try:
+            price_str = response.xpath('.//span[@class="price"]/@content').get()
+            if isinstance(price_str, str):
+                int_price = int(price_str)
+            else:
+                int_price = price_str
+        except:
+            print('価格情報が取得できません')
+            int_price = None
+        # Items.pyのPostItemへyieldする
+        yield PostItem(
+            title=response.xpath('.//div[@id="productTitle"]/h1/text()').get(),
+            price=int_price,
+            jan=response.xpath('.//span[contains(text(),"JAN")]/following-sibling::span[@class="categoryValue"]/text()')
+            .get(),
+            url=response.request.url
+        )
+
