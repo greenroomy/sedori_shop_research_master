@@ -1,5 +1,4 @@
 import scrapy
-from scrapy.shell import inspect_response
 from ..items import PostItem
 from urllib.parse import urlparse
 
